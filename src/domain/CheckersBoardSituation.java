@@ -30,10 +30,6 @@ public class CheckersBoardSituation {
         this.checkerPieces = new CheckerPiece[rows][cols];
 
 
-//        checkerPieces[4][4] = new Blue(4, 4, Colors.BLUE, true);
-
-
-//        checkerPieces[3][3] = new Red(3, 3, Colors.RED, true);
 
 
         initializeField();
@@ -49,11 +45,9 @@ public class CheckersBoardSituation {
                     if (j < 3) {
                         Blue blueChecker = new Blue(i, j, Colors.BLUE, false);
                         checkerPieces[i][j] = blueChecker;
-//                        blueCheckers.add(blueChecker);
                     } else if (j > 4) {
                         Red redChecker = new Red(i, j, Colors.RED, false);
                         checkerPieces[i][j] = redChecker;
-//                        redCheckers.add(redChecker);
                     }
                 }
             }

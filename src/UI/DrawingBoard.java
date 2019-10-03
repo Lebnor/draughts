@@ -18,13 +18,13 @@ import java.util.List;
 public class DrawingBoard extends JPanel implements MouseListener, KeyListener {
 
     private CheckersBoardSituation checkersBoardSituation = new CheckersBoardSituation(8, 8);
-    private File gameOverRedWins = new File("gameOverRedWins.png");
-    private File gameoverBlueWins = new File("BW.png");
+    private File gameOverRedWins = new File("src/Images/gameOverRedWins.png");
+    private File gameoverBlueWins = new File("src/Images/BW.png");
 
-    private File redChecker = new File("redCheckerImage.png");
-    private File blueChecker = new File("BlueCheckerImage.png");
-    private File redKing = new File("redKing.png");
-    private File blueKing = new File("blueKing.png");
+    private File redChecker = new File("src/Images/redCheckerImage.png");
+    private File blueChecker = new File("src/Images/BlueCheckerImage.png");
+    private File redKing = new File("src/Images/redKing.png");
+    private File blueKing = new File("src/Images/blueKing.png");
 
 
     private BufferedImage master;

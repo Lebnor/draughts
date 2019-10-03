@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Blue extends TeamBlue {
+public class Blue extends  CheckerPiece implements TeamBlue {
 
 
     public Blue(int x, int y, Colors colors, boolean isKing) {
@@ -16,7 +16,7 @@ public class Blue extends TeamBlue {
     }
 
     @Override
-    public List<Location> possibleMovements() {
+    public List<Location> oneStepForward() {
         List<Location> possibleMoves = new ArrayList<>();
 
         possibleMoves.add(new Location(this.getLocation().getX() + 1, this.getLocation().getY() + 1));
@@ -24,7 +24,7 @@ public class Blue extends TeamBlue {
 
         if (isKing()) {
             CheckerPiece compare = new Red(this.getLocation().getX(),this.getLocation().getY(), Colors.RED,false);
-            possibleMoves.addAll(((Red) compare).possibleMovements());
+            possibleMoves.addAll(((Red) compare).oneStepForward());
         }
 
         ListIterator iterator = possibleMoves.listIterator();
@@ -38,7 +38,7 @@ public class Blue extends TeamBlue {
     }
 
     @Override
-    protected List<Location> possibleEat() {
+    public List<Location> possibleEat() {
         return null;
     }
 

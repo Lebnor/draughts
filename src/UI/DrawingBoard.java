@@ -8,23 +8,20 @@ import piece.Piece;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 
-public class DrawingBoard extends JPanel implements MouseListener, ActionListener {
+public class DrawingBoard extends JPanel implements MouseListener, KeyListener {
 
     private CheckersBoardSituation checkersBoardSituation = new CheckersBoardSituation(8, 8);
     private File gameOverRedWins = new File("gameOverRedWins.png");
     private File gameoverBlueWins = new File("BW.png");
 
-    private File redChecker = new File ("redCheckerImage.png");
+    private File redChecker = new File("redCheckerImage.png");
     private File blueChecker = new File("BlueCheckerImage.png");
     private File redKing = new File("redKing.png");
     private File blueKing = new File("blueKing.png");
@@ -63,11 +60,9 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
         super.setBackground(new Color(220, 220, 220, 250));
 
 
-
-
         List<Piece> checkerPieces = checkersBoardSituation.getPiecesLocations();
 
-       // nested loops handle painting the draught pieces
+        // nested loops handle painting the draught pieces
         for (int i = 0; i < 716; i += 100) {
             for (int j = 0; j < 735; j += 100) {
                 if ((i + j) % 200 == 0) {
@@ -84,16 +79,16 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
                     if (checkerPiece instanceof Blue) {
                         g.setColor(new Color(31, 40, 255));
 //                        g.fillOval(x * 100 + 25, y * 100 + 25, 50, 50);
-                        g.drawImage(blueCheckerImage,x*100,y*100,100,100,null);
+                        g.drawImage(blueCheckerImage, x * 100, y * 100, 100, 100, null);
                         if (((Blue) checkerPiece).isKing()) {
-                            g.drawImage(blueKingImage,x*100,y*100,100,100,null);
+                            g.drawImage(blueKingImage, x * 100, y * 100, 100, 100, null);
                         }
                     } else {
                         checkerPiece = (CheckerPiece) checkerPiece;
                         if (((CheckerPiece) checkerPiece).isKing()) {
                             g.drawImage(redKingImage, x * 100, y * 100, 100, 100, null);
                         } else {
-                            g.drawImage(redCheckerImage,x*100,y*100,100,100,null);
+                            g.drawImage(redCheckerImage, x * 100, y * 100, 100, 100, null);
                         }
 
                     }
@@ -101,21 +96,18 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
                 }
             }
         }
-        if (checkersBoardSituation.checkIfGameOver()==1){
+        if (checkersBoardSituation.checkIfGameOver() == 1) {
             JFrame frame = new JFrame();
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(this);
-            frame.setSize(300,300);
-
-
-
+            frame.setSize(300, 300);
 
 
             JPanel panel = new JPanel() {
                 @Override
                 public void paintComponent(Graphics g) {
                     super.paintComponent(g);
-                    g.drawImage(gameOverBlueWin,0,0,300,300,null);
+                    g.drawImage(gameOverBlueWin, 0, 0, 300, 300, null);
 
                 }
             };
@@ -154,8 +146,8 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
             frame.add(new JLabel("Game Over"));
             frame.setVisible(true);
 
-        }else if (checkersBoardSituation.checkIfGameOver()==2){
-            g.drawImage(gameOverRedWin,300,300,200,200,null);
+        } else if (checkersBoardSituation.checkIfGameOver() == 2) {
+            g.drawImage(gameOverRedWin, 300, 300, 200, 200, null);
         }
 
 
@@ -190,10 +182,11 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
 
         }
 
-        if (e.getButton() == MouseEvent.BUTTON2){
+        if (e.getButton() == MouseEvent.BUTTON2) {
             checkersBoardSituation.cheat();
             repaint();
         }
+
     }
 
     @Override
@@ -211,8 +204,22 @@ public class DrawingBoard extends JPanel implements MouseListener, ActionListene
 
     }
 
+
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+            checkersBoardSituation.restart();
+            System.out.println("restarting");
+            repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }

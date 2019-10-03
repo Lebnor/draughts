@@ -3,17 +3,23 @@ package piece;
 import colors.Colors;
 import domain.Location;
 
+import java.awt.*;
 import java.util.Objects;
 
 public abstract class Piece {
 
     private Location location;
     private Colors color;
+    private Color color1;
 
 
     public Piece(int x, int y, Colors color) {
         this.location = new Location(x,y);
         this.color = color;
+    }
+    public Piece(Color color1){
+        this.location = new Location(0,0);
+        this.color1 = color1;
     }
 
     public Location getLocation() {

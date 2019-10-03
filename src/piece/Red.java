@@ -7,7 +7,7 @@ import teams.TeamRed;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Red extends TeamRed {
+public class Red extends  CheckerPiece implements TeamRed {
 
 
     public Red(int x, int y, Colors colors, boolean isKing) {
@@ -15,7 +15,7 @@ public class Red extends TeamRed {
     }
 
     @Override
-    public List<Location> possibleMovements() {
+    public List<Location> oneStepForward() {
         List<Location> possibleMovements = new ArrayList<>();
 
         possibleMovements.add(new Location(this.getLocation().getX() - 1, this.getLocation().getY() - 1));
@@ -23,14 +23,14 @@ public class Red extends TeamRed {
 
         if (isKing()) {
             CheckerPiece cmp = new Blue(this.getLocation().getX(), this.getLocation().getY(), Colors.BLUE, false);
-            possibleMovements.addAll(((Blue) cmp).possibleMovements());
+            possibleMovements.addAll(((Blue) cmp).oneStepForward());
         }
 
         return possibleMovements;
     }
 
-    @Override
-    protected List<Location> possibleEat() {
+
+     public List<Location> possibleEat() {
         return null;
     }
 }

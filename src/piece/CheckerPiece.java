@@ -15,7 +15,7 @@ public abstract class CheckerPiece extends Piece {
         this.isKing = isKing;
     }
 
-    public abstract List<Location> possibleMovements();
+    public abstract List<Location> oneStepForward();
 
     protected abstract List<Location> possibleEat();
 

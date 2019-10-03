@@ -11,6 +11,8 @@ public class CheckersBoard implements Runnable {
 
 
     private JFrame frame;
+    private         DrawingBoard drawingBoard = new DrawingBoard();
+
 
     public void Setup() {
         frame = new JFrame("Checkers game");
@@ -18,6 +20,8 @@ public class CheckersBoard implements Runnable {
         frame.setPreferredSize(new Dimension(816, 835));
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+//        frame.setContentPane(drawingBoard);
 
         createComponents(frame.getContentPane());
 
@@ -33,13 +37,17 @@ public class CheckersBoard implements Runnable {
 
         DrawingBoard drawingBoard = new DrawingBoard();
         drawingBoard.addMouseListener(drawingBoard);
-        container.add(drawingBoard);
+        drawingBoard.addKeyListener(drawingBoard);
+        frame.addKeyListener(drawingBoard);
+        frame.addMouseListener(drawingBoard);
+
+         container.add(drawingBoard);
 
 //        container.add(new SplashScreen(0));
 
 
-
     }
+
 
     public JFrame getFrame() {
         return frame;

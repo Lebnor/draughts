@@ -12,14 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CheckersBoardSituation  {
+public class CheckersBoardSituation {
     private final int rows;
     private final int cols;
     private CheckerPiece[][] checkerPieces;
     private Piece selectedCheckerPiece;
     private String playerTurn = "blue";
-    private List<Red> redCheckers;
-    private List<Blue> blueCheckers;
+
 
     //to change later
     private boolean turnFunction = false;
@@ -41,6 +40,7 @@ public class CheckersBoardSituation  {
 
 
     }
+
 
     private void initializeField() {
         for (int i = 0; i < rows; i++) {
@@ -91,57 +91,81 @@ public class CheckersBoardSituation  {
 
     }
 
-    public CheckerPiece getPiece(int x, int y) {
+    private CheckerPiece getPiece(int x, int y) {
         if (x < 0 || x >= rows || y < 0 || y >= cols) {
             return null;
         }
         return checkerPieces[x][y];
     }
 
+    private CheckerPiece getPiece(Location location) {
+        return getPiece(location.getX(), location.getY());
+    }
+
     // given a piece, calculates and returns all locations that the piece can go to
-    public List<Location> legalMoves(CheckerPiece checkerPiece) {
+    private List<Location> legalMoves(CheckerPiece toCheck) {
 
-        boolean isKing = checkerPiece.isKing();
 
-        List<Location> possibleMoves = new ArrayList<>();
 
-        for (Location loc : checkerPiece.possibleMovements()) {
-            if (loc.getX() < 0 || loc.getX() >= rows || loc.getY() < 0 || loc.getY() >= cols) {
+        boolean isKing = toCheck.isKing();
+
+        //
+        List<Location> legalMoves = new ArrayList<>();
+
+        // list of locations if the piece were to move one diagonal forward
+        List<Location> oneStepForward = toCheck.oneStepForward();
+
+        for (Location loc : oneStepForward) {
+            int x = loc.getX();
+            int y = loc.getY();
+
+            if (x < 0 || x >= rows || y < 0 || y >= cols) {
                 continue;
-            } else if (!isOccupied(loc.getX(), loc.getY())) {
-                possibleMoves.add(loc);
-            } else if (getPiece(loc.getX(),loc.getY()).getColor()!= checkerPiece.getColor()){
-                Piece pieceToCheck = null;
-                if (checkerPiece.getColor() == Colors.BLUE) {
-                    pieceToCheck = new Blue(loc.getX(), loc.getY(), Colors.BLUE, isKing);
 
-                } else if (checkerPiece.getColor() == Colors.RED) {
-                    pieceToCheck = new Red(loc.getX(), loc.getY(), Colors.RED, isKing);
+                //empty place so you can go there
+            } else if (!isOccupied(x, y)) {
+                legalMoves.add(loc);
+
+                //space is not empty, and color is not the same so you can eat it
+            } else if (getPiece(x, y).getColor() != toCheck.getColor()) {
+                CheckerPiece pieceToCheck = null;
+
+                if (toCheck.getColor() == Colors.BLUE) {
+                    pieceToCheck = new Blue(x, y, Colors.BLUE, isKing);
+
+                } else if (toCheck.getColor() == Colors.RED) {
+                    pieceToCheck = new Red(x, y, Colors.RED, isKing);
                 }
                 assert pieceToCheck != null;
-                for (Location l : ((CheckerPiece) pieceToCheck).possibleMovements()) {
-                    if (l.getX() - checkerPiece.getLocation().getX() == 0 || l.getY() - checkerPiece.getLocation().getY() == 0) {
+
+                for (Location l : pieceToCheck.oneStepForward()) {
+
+
+                    if (l.getX() - toCheck.getLocation().getX() == 0 || l.getY() - toCheck.getLocation().getY() == 0) {
                         continue;
                     }
                     if (l.getX() < 0 || l.getX() >= rows || l.getY() < 0 || l.getY() >= cols) {
                         continue;
                     } else if (!isOccupied(l.getX(), l.getY())) {
-                        possibleMoves.add(l);
+                        legalMoves.add(l);
                     }
                 }
             }
         }
-        return possibleMoves;
+        return legalMoves;
     }
 
-    public void kill(int x, int y) {
+    //removes the piece from the coordinate given
+    private void kill(int x, int y) {
         if (x < 0 || x > rows || y < 0 || y > cols) {
             return;
         }
         checkerPieces[x][y] = null;
     }
 
-
+    // logic to moving a peace: check if the attempted location is within legal-moves list,
+    // if so create new peace at that location, and delete old one.
+    // then check if the piece went more than 1 distance, that means he ate another peace
     public void movePiece(CheckerPiece checkerPiece, int toX, int toY) {
 
         boolean isKing = checkerPiece.isKing();
@@ -214,19 +238,6 @@ public class CheckersBoardSituation  {
         }
         return (checkerPieces[x][y] != null);
     }
-//
-//    public Piece getPieceFromLoc(int x, int y) {
-//        if (x < 0 || x >= this.rows || y < 0 || y >= this.cols) {
-//            return null;
-//        }
-//        if (pieces[x][y] == null) {
-//            return null;
-//        }
-//        if (!isOccupied(x, y)) {
-//            return null;
-//        }
-//        return pieces[x][y];
-//    }
 
 
 
@@ -248,17 +259,18 @@ public class CheckersBoardSituation  {
         return selectedCheckerPiece;
     }
 
-    public void deSelectPiece() {
+    private void deSelectPiece() {
         this.selectedCheckerPiece = null;
     }
-    public void cheat(){
+
+    public void cheat() {
         checkerPieces[4][4] = new Blue(4, 4, Colors.BLUE, true);
         checkerPieces[3][3] = new Red(3, 3, Colors.RED, true);
 
-        for (int i = 0; i < rows; i++){
-            for (int j = 0; j < cols; j++){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
 
-                    kill(i,j);
+                kill(i, j);
 
             }
         }
@@ -268,4 +280,12 @@ public class CheckersBoardSituation  {
 
     }
 
+    public void restart() {
+        for (int i = 0; i < checkerPieces.length; i++) {
+            for (int j = 0; j < checkerPieces.length; j++) {
+                checkerPieces[i][j] = null;
+            }
+        }
+        initializeField();
+    }
 }
